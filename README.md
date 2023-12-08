@@ -33,5 +33,5 @@
 
 
 수정할 것 딱 2가지
-1. `./traefik/etc/traefik.yml`
-2. `docker-compose.yml 파일에 있는 대시보드용 도메인 수정`
+1. `./traefik/etc/traefik.yml` 이메일 수정
+2. `docker-compose.yml` 파일에 있는 대시보드용 도메인 수정
