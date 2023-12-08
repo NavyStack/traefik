@@ -4,8 +4,8 @@
 
 ## Step.0 기본적인 것들 완료하기
 * docker 설치
-* 운영체제의 방화벽에서 80/tcp 443/tcp 443/udp 허용
-* 클라우드 혹은 공유기에서 80/tcp 443/tcp 443/udp 허용
+* 운영체제의 방화벽에서 80/tcp, 443/tcp, 443/udp 허용
+* 클라우드 혹은 공유기에서 80/tcp, 443/tcp, 443/udp 허용
 
 ## Step.1 Git clone 하기
 `git clone https://github.com/NavyStack/traefik.git && cd traefik`
