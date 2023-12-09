@@ -22,6 +22,5 @@
 [tls.options]
     [tls.options.default]
         minVersion = "VersionTLS12"
-        sniStrict = true
     [tls.options.mintls13]
         minVersion = "VersionTLS13"

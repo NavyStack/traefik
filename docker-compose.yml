@@ -14,20 +14,25 @@ services:
       timeout: 2s
       retries: 3
       start_period: 5s
-
+    command:
+      - "--log.level=WARN"
+      - "--accesslog=true"
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=traefik-network"
       - "traefik.http.services.dashboard.loadbalancer.server.port=8080"
-      - "traefik.http.routers.dashboard.rule=Host(`dashboard.example.com`)"
+      - "traefik.http.services.dashboard.loadbalancer.passhostheader=true"
+      - "traefik.http.routers.dashboard.rule=Host(`dash.example.com`)"
       - "traefik.http.routers.dashboard.entrypoints=websecure"
       - "traefik.http.routers.dashboard.service=api@internal"
+      - "traefik.http.routers.dashboard.tls=true"
+      - "traefik.http.routers.dashboard.tls.certresolver=letsencrypt"
 
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./etc/traefik.yml:/etc/traefik/traefik.yml
+      - ./etc/traefik.toml:/etc/traefik/traefik.toml
       - ./etc/dynamic.toml:/etc/traefik/dynamic.toml
-      - ./etc/traefik/ssl/:/ssl-certs/
+      - traefik-certificates:/etc/traefik/acme
 
     networks:
       - traefik-network
@@ -44,7 +49,19 @@ services:
         published: 443
         mode: host
         protocol: udp
+      - target: 8080
+        published: 8080
+        mode: host
+        protocol: tcp
 
 networks:
   traefik-network:
     external: true
+
+volumes:
+  traefik-certificates:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ./etc/traefik/ssl/

@@ -1,0 +1,67 @@
+
+[global]
+    sendAnonymousUsage = false
+    checkNewVersion = true
+
+[api]
+    dashboard = true
+    insecure = true
+    debug = true
+
+[log]
+    level = "ERROR"
+    #filePath = "/etc/traefik/logs/log-file.log"
+
+[accessLog]
+    #filePath = "/etc/traefik/logs/access.log"
+    #[accessLog.filters]
+        #statusCodes = ["200", "300-302"]
+        #retryAttempts = true
+        #minDuration = "10ms"
+[ping]
+    entryPoint = "ping"
+
+[entryPoints]
+    [entryPoints.web]
+        address = ":80"
+
+    [entryPoints.web.http.redirections]
+        [entryPoints.web.http.redirections.entryPoint]
+            to = "websecure"
+            scheme = "https"
+            permanent = true
+
+    [entryPoints.websecure]
+        address = ":443"
+        [entryPoints.websecure.http3]
+            advertisedPort = 443
+
+    [entryPoints.ping]
+        address = ":8082"
+
+[providers]
+    [providers.file]
+        watch = true
+        filename = "/etc/traefik/dynamic.toml"
+  
+    [providers.docker]
+        endpoint = "unix:///var/run/docker.sock"
+        exposedByDefault = false
+        network = "traefik-network"
+        watch = true
+
+[certificatesResolvers.letsencrypt.acme]
+  email = "webmaster@example.com"
+  storage = "/etc/traefik/acme/acme.json"
+  [certificatesResolvers.letsencrypt.acme.httpChallenge]
+    entryPoint = "web"
+
+[metrics]
+    [metrics.prometheus]
+        buckets = [0.1,0.3,1.2,5.0]
+        addEntryPointsLabels = true
+        addRoutersLabels = true
+        addServicesLabels = true
+
+[experimental]
+    http3 = true
