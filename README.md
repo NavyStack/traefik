@@ -1,8 +1,9 @@
 # Traefik(트래픽) 리버스 프록시
-누구나 따라할 수 있는, 그리고 이해도 필요 없는 너무나 쉬운 리버스 프록시 <br>
-이것만 따라하면 추가적인 Traefik 설정을 할 일은 없으실 겁니다. (고급 사용자는.... 알아서 하세요.....) <br>
-특히 제가 올리는 docker-compose는 바로 올라갑니다. <br> <br>
-혹시 질문이 있다면 저의 [블로그](https://navystack.com/2023/11/%eb%9d%bc%ec%9d%b4%eb%af%b9%ec%8a%a4-%ec%98%88%ec%a0%9c%eb%a1%9c-%eb%b0%b0%ec%9a%b0%eb%8a%94-traefik-%eb%a6%ac%eb%b2%84%ec%8a%a4-%ed%94%84%eb%a1%9d%ec%8b%9c-%ec%a0%95%eb%a6%ac/) 포스트에 작성하셔도 됩니다. (별다른 로그인이 필요하지 않음.)
+누구나 따라할 수 있는, 그리고 이해도 필요 없는 너무나 쉬운 리버스 프록시 DNS dnsChallenge
+
+>[!Important]
+> 정리해서 https://github.com/NavyStack/traefik.git 에 merge할 예정입니다.
+
 
 ## Step.0 기본적인 것들 완료하기
 * docker 설치
