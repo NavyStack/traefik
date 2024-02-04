@@ -1,0 +1,26 @@
+[http]
+    [http.middlewares]
+
+        [http.middlewares.websocket.headers.customRequestHeaders]
+            X-Forwarded-Proto = "https, wss"
+
+        [http.middlewares.www-to-Root.redirectRegex]
+            regex = "^https?://www\\.(.+)"
+            replacement = "https://${1}"
+            permanent = true
+
+        [http.middlewares.security-headers.headers]
+            browserXssFilter = true
+            contentTypeNosniff = true
+            forceSTSHeader = true
+            sslRedirect = true
+            stsSeconds = 604800
+
+        [http.middlewares.compress-1024.compress]
+            minResponseBodyBytes = 1024
+
+[tls.options]
+    [tls.options.default]
+        minVersion = "VersionTLS12"
+    [tls.options.mintls13]
+        minVersion = "VersionTLS13"

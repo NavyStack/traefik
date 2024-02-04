@@ -1,0 +1,75 @@
+version: "3.9"
+
+services:
+  traefik:
+    image: traefik:v2.9
+    restart: unless-stopped
+    logging:
+      options:
+        max-size: "10m"
+
+    healthcheck:
+      test: ["CMD", "wget", "http://localhost:8082/ping", "--spider"]
+      interval: 10s
+      timeout: 2s
+      retries: 3
+      start_period: 5s
+    command:
+      - "--log.level=WARN"
+      - "--accesslog=true"
+    labels:
+      - "traefik.enable=true"
+
+      - "traefik.docker.network=proxynet"
+
+      - "traefik.http.services.dashboard.loadbalancer.server.port=8080"
+      - "traefik.http.services.dashboard.loadbalancer.passhostheader=true"
+
+      - "traefik.http.routers.dashboard.rule=Host(`dash.example.navystack.com`)"
+      - "traefik.http.routers.dashboard.entrypoints=websecure"
+      - "traefik.http.routers.dashboard.service=api@internal"
+      
+      - "traefik.http.routers.dashboard.tls=true"
+      - "traefik.http.routers.dashboard.tls.certresolver=cloudflare"
+      - "traefik.http.routers.dashboard.tls.domains[0].main=example.navystack.com"
+      - "traefik.http.routers.dashboard.tls.domains[0].sans=*.example.navystack.com"
+
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./etc/traefik.toml:/etc/traefik/traefik.toml
+      - ./etc/dynamic.toml:/etc/traefik/dynamic.toml
+      - traefik-certificates:/etc/traefik/acme
+    environment:
+      - CF_DNS_API_TOKEN=5Gy5s4fa68u85buuIdMr81JiOW2yYkJC9A-Pt044
+
+    networks:
+      - proxynet
+
+    ports:
+      - target: 80
+        published: 80
+        mode: host
+      - target: 443
+        published: 443
+        mode: host
+        protocol: tcp
+      - target: 443
+        published: 443
+        mode: host
+        protocol: udp
+      - target: 8080
+        published: 8080
+        mode: host
+        protocol: tcp
+
+networks:
+  proxynet:
+    external: true
+
+volumes:
+  traefik-certificates:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ./etc/traefik/ssl/
