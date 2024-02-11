@@ -50,11 +50,11 @@
         network = "traefik-network"
         watch = true
 
-[certificatesResolvers.cloudflare.acme]
+[certificatesResolvers.letscrypt.acme]
   email = "webmaster@navystack.com"
   storage = "/etc/traefik/acme/acme.json"
-  [certificatesResolvers.cloudflare.acme.dnsChallenge]
-    provider = "cloudflare"
+  [certificatesResolvers.letscrypt.acme.dnsChallenge]
+    provider = "letscrypt"
     delayBeforeCheck = 0
 
 [metrics]
